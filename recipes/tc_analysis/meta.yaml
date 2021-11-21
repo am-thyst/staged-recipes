@@ -1,0 +1,53 @@
+# Note: there are many handy hints in comments in this example -- remove them when you've finalized your recipe
+
+# Jinja variables help maintain the recipe as you'll update the version only here.
+# Using the name variable with the URL in line 14 is convenient
+# when copying and pasting from another recipe, but not really needed.
+{% set name = "tc_analysis" %}
+{% set version = "1.0.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  # uncomment the line below, and modify as needed. Use releases if available:
+  url: https://github.com/am-thyst/tc_analysis/archive/refs/heads/master.zip
+  sha256: 2d77332ac37c391fb99e286c6c0ba7dad904fbb2641e4fc8f3745e39d070f981
+
+build:
+  noarch: python
+  number: 0
+  script: "{{ PYTHON }} -m pip install . -vv"
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+  host:
+    - python
+    - pip
+  run:
+    - python
+
+test:
+  imports:
+    - tc_analysis
+  requires:
+    - pip
+  commands:
+    - pip check
+
+about:
+  home: https://github.com/am-thyst/tc_analysis
+  summary: 'Tools to analyse modelled and observed tropical cyclones'
+  # The remaining entries in this section are optional, but recommended.
+  description: |
+    A simple package which includes different helpful functions
+    to aid analysis of modelled and observed tropical cyclones. 
+    Based on Met Office models and NOAA's observations
+  doc_url: https://tc-analysis.readthedocs.io/
+  dev_url: https://github.com/am-thyst/tc_analysis
+
+extra:
+  recipe-maintainers:
+    - am-thyst
